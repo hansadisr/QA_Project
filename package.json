@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "setup": "cd backend && npm ci && cd ../frontend && npm ci",
+    "setup": "npm ci && cd backend && npm ci && cd ../frontend && npm ci",
     "build:frontend": "cd frontend && npm run build",
     "serve:frontend": "npx serve -s frontend/build -l 3000",
     "start:backend": "node backend/server.js",

@@ -32,7 +32,8 @@ jobs:
           wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
           echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+          sudo apt-get install -y google-chrome-stable=140.0.1234-1 # Adjust version
+          google-chrome --version
 
       - name: Debug directory structure
         run: ls -la && ls -la tests/selenium || echo "tests/selenium directory not found"
@@ -67,4 +68,5 @@ jobs:
         timeout-minutes: 2
 
       - name: Run Selenium Tests
-        run: npm run test:selenium
+        run: npm run test:selenium -- --verbose
+        timeout-minutes: 5
