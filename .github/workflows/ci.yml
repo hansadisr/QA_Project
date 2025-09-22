@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger this pipeline when changes are pushed to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger this pipeline for pull requests to the main branch
+
+jobs:
+  # Job 1: Build and Test
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2  # Check out your repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Specify Node.js version
+
+      - name: Install dependencies
+        run: npm install  # Install project dependencies
+
+      - name: Run Selenium tests
+        run: npm run test:selenium  # Run Selenium tests defined in your package.json
