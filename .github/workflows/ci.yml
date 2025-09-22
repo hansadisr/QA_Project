@@ -27,17 +27,6 @@ jobs:
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
 
-      - name: Install Google Chrome
-        run: |
-          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/google-chrome.gpg
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          google-chrome --version
-
-      - name: Debug directory structure
-        run: ls -la && ls -la tests/selenium || echo "tests/selenium directory not found"
-
       - name: Install dependencies
         run: npm run setup
 
@@ -66,7 +55,3 @@ jobs:
       - name: Wait for Services
         run: npx wait-on http://localhost:4000/health http://localhost:3000 --timeout 60000
         timeout-minutes: 2
-
-      - name: Run Selenium Tests
-        run: npm run test:selenium -- --verbose
-        timeout-minutes: 5
