@@ -1,0 +1,71 @@
+/* Light/Dark theme via CSS variables on :root[data-theme] */
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #666;
+  --border: #e6e6e6;
+  --brand: #0d6efd; /* link/buttons */
+  --surface: #fafafa;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --fg: #e6edf3;
+  --muted: #9aa4ad;
+  --border: #1f2630;
+  --brand: #4ea1ff;
+  --surface: #151922;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Basic building blocks */
+.container { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.row { display: flex; gap: 8px; align-items: center; }
+input, button {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+}
+input { width: 100%; }
+button { cursor: pointer; }
+
+.btn-primary {
+  background: var(--brand);
+  color: white;
+  border: 1px solid transparent;
+}
+.btn-link {
+  background: transparent;
+  border: none;
+  color: var(--brand);
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Navbar */
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 10;
+}
+.nav-left a {
+  text-decoration: none; color: var(--fg); font-weight: 700; margin-right: 12px;
+}
+.nav-right a {
+  text-decoration: none; color: var(--brand); margin-right: 12px;
+}
+.badge {
+  font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+  padding: 4px 8px; border-radius: 999px;
+}
