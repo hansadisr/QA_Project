@@ -3,27 +3,48 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Trigger this pipeline when changes are pushed to the main branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger this pipeline for pull requests to the main branch
+      - main
 
 jobs:
-  # Job 1: Build and Test
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2  # Check out your repository
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '15'  # Specify Node.js version
+          node-version: '18'
+
+      - name: Install Google Chrome (for Selenium)
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Debug directory structure
+        run: ls -la && ls -la tests/selenium || echo "tests/selenium directory not found"
 
       - name: Install dependencies
-        run: npm install  # Install project dependencies
+        run: npm run setup
 
-      - name: Run Selenium tests
-        run: npm run test:selenium  # Run Selenium tests defined in your package.json
+      - name: Build Frontend
+        run: npm run build:frontend
+
+      - name: Start Backend (background)
+        run: npm run start:backend &
+
+      - name: Start Frontend (background)
+        run: npm run serve:frontend &
+
+      - name: Wait for Services
+        run: npx wait-on http://localhost:4000/health && npx wait-on http://localhost:3000
+
+      - name: Run Selenium Tests
+        run: npm run test:selenium
