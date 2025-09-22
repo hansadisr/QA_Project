@@ -21,6 +21,12 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create .env file
+        run: |
+          echo "MONGO_URL=${{ secrets.MONGO_URL }}" > backend/.env
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+
       - name: Install Google Chrome
         run: |
           wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -41,22 +47,24 @@ jobs:
         run: ls -la frontend/build || echo "Frontend build directory not found"
 
       - name: Start Backend
-        run: npm run start:backend &
+        run: cd backend && npm run ci:start &
+        timeout-minutes: 2
+
+      - name: Debug Backend Logs
+        run: sleep 10 && curl -s http://localhost:4000/health || echo "Backend health check failed"
+        timeout-minutes: 2
 
       - name: Start Frontend
         run: npm run serve:frontend &
+        timeout-minutes: 2
 
-      - name: Debug Backend Status
-        run: curl -s http://localhost:4000/health || echo "Backend health check failed"
-        timeout-minutes: 1
-
-      - name: Debug Frontend Status
-        run: curl -s http://localhost:3000 || echo "Frontend status check failed"
-        timeout-minutes: 1
+      - name: Debug Frontend Logs
+        run: sleep 10 && curl -s http://localhost:3000 || echo "Frontend status check failed"
+        timeout-minutes: 2
 
       - name: Wait for Services
-        run: npx wait-on http://localhost:4000/health http://localhost:3000 --timeout 30000
-        timeout-minutes: 1
+        run: npx wait-on http://localhost:4000/health http://localhost:3000 --timeout 60000
+        timeout-minutes: 2
 
       - name: Run Selenium Tests
         run: npm run test:selenium
