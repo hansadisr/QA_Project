@@ -19,9 +19,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      - name: Install Google Chrome (for Selenium)
+      - name: Install Google Chrome
         run: |
           wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
           echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
@@ -37,14 +37,26 @@ jobs:
       - name: Build Frontend
         run: npm run build:frontend
 
-      - name: Start Backend (background)
+      - name: Debug Frontend Build
+        run: ls -la frontend/build || echo "Frontend build directory not found"
+
+      - name: Start Backend
         run: npm run start:backend &
 
-      - name: Start Frontend (background)
+      - name: Start Frontend
         run: npm run serve:frontend &
 
+      - name: Debug Backend Status
+        run: curl -s http://localhost:4000/health || echo "Backend health check failed"
+        timeout-minutes: 1
+
+      - name: Debug Frontend Status
+        run: curl -s http://localhost:3000 || echo "Frontend status check failed"
+        timeout-minutes: 1
+
       - name: Wait for Services
-        run: npx wait-on http://localhost:4000/health && npx wait-on http://localhost:3000
+        run: npx wait-on http://localhost:4000/health http://localhost:3000 --timeout 30000
+        timeout-minutes: 1
 
       - name: Run Selenium Tests
         run: npm run test:selenium
