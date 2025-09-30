@@ -87,7 +87,10 @@ app.use(morgan('dev'));
 
 app.get('/health', (_, res) => res.send('ok'));
 
-app.use('/api/auth/login', rateLimit({ windowMs: 60_000, max: 30 }));
+//Apply specific rate limits
+app.use('/api/auth/login', rateLimit({ windowMs: 60*1000, max: 30 }));
+// Add this new rate limit for the signup endpoint
+app.use('/api/auth/signup', rateLimit({ windowMs: 60 * 1000, max: 10 })); 
 app.use('/api/auth', authRouter);
 app.use('/api/tasks', taskRouter);
 
