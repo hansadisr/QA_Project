@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Task = require('../models/Task');
 const auth = require('../mw/auth');
+const sanitizeHtml = require('sanitize-html');
 
 const taskRouter = express.Router();
 taskRouter.use(auth);
@@ -16,7 +17,9 @@ taskRouter.post('/',
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
+    
+    
+    
     const t = await Task.create({ title: req.body.title, userId: req.user.sub });
     res.status(201).json(t);
   });

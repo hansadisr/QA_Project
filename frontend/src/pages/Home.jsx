@@ -12,9 +12,14 @@ export default function Home() {
     try {
       const { data } = await api.get('/api/tasks');
       setTasks(data);
-    } catch (e) {
-      setErr('Could not load tasks. Are you logged in?');
-    }
+    } 
+    catch (e) {
+  // 1. Log the error for debugging purposes
+  console.error('Error loading tasks:', e); 
+  
+  // 2. Set the user-facing error message (as you already were)
+  setErr('Could not load tasks. Are you logged in?');
+}
   };
 
   const add = async () => {
@@ -23,9 +28,14 @@ export default function Home() {
       await api.post('/api/tasks', { title: newTask });
       setNewTask('');
       load();
-    } catch (e) {
-      setErr('Failed to add task');
-    }
+    } 
+    catch (e) {
+  // Log the error for debugging
+  console.error('Task addition failed:', e); 
+  
+  // Set the user-facing error message
+  setErr('Failed to add task');
+}
   };
 
   useEffect(() => {

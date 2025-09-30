@@ -22,5 +22,8 @@
     "selenium-webdriver": "^4.35.0",
     "serve": "^14.2.5",
     "wait-on": "^9.0.1"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1"
   }
 }

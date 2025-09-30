@@ -14,6 +14,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
@@ -23,8 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "morgan": "^1.10.1",
-    "bcryptjs": "^2.4.3"
-
+    "sanitize-html": "^2.17.0"
   },
   "devDependencies": {
     "cross-env": "^10.0.0",
@@ -33,6 +33,4 @@
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   }
-
-  
 }
