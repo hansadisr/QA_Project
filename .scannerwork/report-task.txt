@@ -2,5 +2,5 @@ projectKey=task-management-system
 serverUrl=http://localhost:9000
 serverVersion=25.9.0.112764
 dashboardUrl=http://localhost:9000/dashboard?id=task-management-system
-ceTaskId=bcd5d15e-e608-40a5-a2fb-2700ba4b6441
-ceTaskUrl=http://localhost:9000/api/ce/task?id=bcd5d15e-e608-40a5-a2fb-2700ba4b6441
+ceTaskId=22b02e8e-3a18-4836-b06d-35d9af713ed5
+ceTaskUrl=http://localhost:9000/api/ce/task?id=22b02e8e-3a18-4836-b06d-35d9af713ed5

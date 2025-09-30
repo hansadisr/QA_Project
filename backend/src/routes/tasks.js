@@ -8,20 +8,30 @@ const taskRouter = express.Router();
 taskRouter.use(auth);
 
 taskRouter.get('/', async (req, res) => {
-  const items = await Task.find({ userId: req.user.sub }).sort({ createdAt: -1 });
-  res.json(items);
+  try {
+    console.log('GET handler called, req.user:', req.user);
+    const items = await Task.find({ userId: req.user.sub }).sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    console.log('GET error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-taskRouter.post('/',
+taskRouter.post(
+  '/',
   body('title').trim().notEmpty(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-    
-    
-    
-    const t = await Task.create({ title: req.body.title, userId: req.user.sub });
-    res.status(201).json(t);
-  });
+    try {
+      const t = await Task.create({ title: req.body.title, userId: req.user.sub });
+      res.status(201).json(t);
+    } catch (error) {
+      console.log('POST error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+);
 
 module.exports = { taskRouter };
